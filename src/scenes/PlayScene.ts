@@ -28,7 +28,7 @@ class PlayScene extends GameScene {
     this.gameOverText = this.add.image(0, 0, 'game-over');
     this.restartText = this.add.image(0, 80, 'restart');
 
-    this.gameOverContainer = this.add.container(this.gameWidth / 2, this.gameHeight / 2 - 50).add([this.gameOverText, this.restartText]);
+    this.gameOverContainer = this.add.container(this.gameWidth / 2, this.gameHeight / 2 - 50).add([this.gameOverText, this.restartText]).setAlpha(0);
 
     this.startTrigger = this.physics.add.sprite(0, 10, null).setOrigin(0, 1).setAlpha(0);
 
@@ -36,6 +36,7 @@ class PlayScene extends GameScene {
       this.isGameRunning = false;
       this.physics.pause();
       this.player.die();
+      this.gameOverContainer.setAlpha(1);
       this.spawnTime = 0;
       this.gameSpeed = 5;
     });
