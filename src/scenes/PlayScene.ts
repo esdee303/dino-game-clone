@@ -23,19 +23,20 @@ class PlayScene extends GameScene {
   create() {
     this.createEnvironment();
     this.createPlayer();
-    this.obstacles = this.physics.add.group();
+    this.createObstacles();
+    this.createGameOverContainer();
+    this.handleGameStart();
+    this.handleObstacleCollisions();
+    this.handleGameRestart();
+  }
 
-    this.gameOverText = this.add.image(0, 0, 'game-over');
-    this.restartText = this.add.image(0, 80, 'restart').setInteractive();
-
-    this.gameOverContainer = this.add.container(this.gameWidth / 2, this.gameHeight / 2 - 50).add([this.gameOverText, this.restartText]).setAlpha(0);
-
-    this.startTrigger = this.physics.add.sprite(0, 10, null).setOrigin(0, 1).setAlpha(0);
-
+  handleGameRestart() {
     this.restartText.on('pointerDown', () => {
       // Restart the game
     });
+  }
 
+  handleObstacleCollisions() {
     this.physics.add.collider(this.obstacles, this.player, () => {
       this.isGameRunning = false;
       this.physics.pause();
@@ -44,6 +45,10 @@ class PlayScene extends GameScene {
       this.spawnTime = 0;
       this.gameSpeed = 5;
     });
+  }
+
+  handleGameStart() {
+    this.startTrigger = this.physics.add.sprite(0, 10, null).setOrigin(0, 1).setAlpha(0);
 
     this.physics.add.overlap(this.startTrigger, this.player, () => {
       if (this.startTrigger.y === 10) {
@@ -68,6 +73,20 @@ class PlayScene extends GameScene {
         },
       });
     });
+  }
+
+  createObstacles() {
+    this.obstacles = this.physics.add.group();
+  }
+
+  createGameOverContainer() {
+    this.gameOverText = this.add.image(0, 0, 'game-over');
+    this.restartText = this.add.image(0, 80, 'restart').setInteractive();
+
+    this.gameOverContainer = this.add
+      .container(this.gameWidth / 2, this.gameHeight / 2 - 50)
+      .add([this.gameOverText, this.restartText])
+      .setAlpha(0);
   }
 
   update(time: number, delta: number): void {
