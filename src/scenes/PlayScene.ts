@@ -25,8 +25,11 @@ class PlayScene extends GameScene {
     this.startTrigger = this.physics.add.sprite(0, 10, null).setOrigin(0, 1).setAlpha(0);
 
     this.physics.add.collider(this.obstacles, this.player, () => {
-      this.physics.pause();
       this.isGameRunning = false;
+      this.physics.pause();
+      this.player.die();
+      this.spawnTime = 0;
+      this.gameSpeed = 5;  
     });
 
     this.physics.add.overlap(this.startTrigger, this.player, () => {
@@ -58,6 +61,7 @@ class PlayScene extends GameScene {
     if (!this.isGameRunning) return;
 
     this.spawnTime += delta;
+
     if (this.spawnTime > this.spawnInterval) {
       this.spawnObstacle();
       this.spawnTime = 0;
