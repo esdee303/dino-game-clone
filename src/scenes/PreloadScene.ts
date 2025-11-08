@@ -17,6 +17,8 @@ class PreloadScene extends Phaser.Scene {
       frameWidth: 88,
       frameHeight: 94,
     });
+    this.load.image('restart', 'assets/restart.png');
+    this.load.image('game-over', 'assets/game-over.png');
   }
 
   create() {
