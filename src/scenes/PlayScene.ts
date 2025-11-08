@@ -24,6 +24,11 @@ class PlayScene extends GameScene {
 
     this.startTrigger = this.physics.add.sprite(0, 10, null).setOrigin(0, 1).setAlpha(0);
 
+    this.physics.add.collider(this.obstacles, this.player, () => {
+      this.physics.pause();
+      this.isGameRunning = false;
+    });
+
     this.physics.add.overlap(this.startTrigger, this.player, () => {
       if (this.startTrigger.y === 10) {
         this.startTrigger.body.reset(0, this.gameHeight);
@@ -80,7 +85,7 @@ class PlayScene extends GameScene {
   spawnObstacle() {
     const obstacleNumber = Math.floor(Math.random() * PRELOAD_CONFIG.cactusesCount) + 1;
     const distance = Phaser.Math.Between(600, 900);
-    this.obstacles.create(distance, this.gameHeight, `obstacle-${obstacleNumber}`).setOrigin(0, 1);
+    this.obstacles.create(distance, this.gameHeight, `obstacle-${obstacleNumber}`).setOrigin(0, 1).setImmovable();
   }
 }
 
