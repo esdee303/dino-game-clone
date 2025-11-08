@@ -26,11 +26,15 @@ class PlayScene extends GameScene {
     this.obstacles = this.physics.add.group();
 
     this.gameOverText = this.add.image(0, 0, 'game-over');
-    this.restartText = this.add.image(0, 80, 'restart');
+    this.restartText = this.add.image(0, 80, 'restart').setInteractive();
 
     this.gameOverContainer = this.add.container(this.gameWidth / 2, this.gameHeight / 2 - 50).add([this.gameOverText, this.restartText]).setAlpha(0);
 
     this.startTrigger = this.physics.add.sprite(0, 10, null).setOrigin(0, 1).setAlpha(0);
+
+    this.restartText.on('pointerDown', () => {
+      // Restart the game
+    });
 
     this.physics.add.collider(this.obstacles, this.player, () => {
       this.isGameRunning = false;
