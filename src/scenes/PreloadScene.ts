@@ -10,6 +10,10 @@ class PreloadScene extends Phaser.Scene {
     this.load.image('ground', 'assets/ground.png');
     this.load.image('dino-idle', 'assets/dino-idle-2.png');
     this.load.image('dino-hurt', 'assets/dino-hurt.png');
+    this.load.spritesheet('dino-down', 'assets/dino-down-2.png', { 
+      frameWidth: 118, 
+      frameHeight: 94 
+    });
     for (let i = 0; i < PRELOAD_CONFIG.cactusesCount; i++) {
       this.load.image(`obstacle-${i + 1}`, `assets/cactuses_${i + 1}.png`);
     }
