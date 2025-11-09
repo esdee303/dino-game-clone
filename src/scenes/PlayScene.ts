@@ -12,9 +12,14 @@ class PlayScene extends GameScene {
   gameOverContainer: Phaser.GameObjects.Container;
   gameOverText: Phaser.GameObjects.Image;
   restartText: Phaser.GameObjects.Image;
+  score: number = 0;
+  scoreInterval: number = 100;
+  scoreDeltaTime: number = 0;
   spawnInterval: number = 1500;
   spawnTime: number = 0;
   gameSpeed: number = 5;
+  gameSpeedModifier: number = 1;
+  progressSound: Phaser.Sound.HTML5AudioSound;
 
   constructor() {
     super('PlayScene');
@@ -25,10 +30,12 @@ class PlayScene extends GameScene {
     this.createPlayer();
     this.createObstacles();
     this.createGameOverContainer();
+    this.createAnimations();
     this.handleGameStart();
     this.handleObstacleCollisions();
     this.handleGameRestart();
   }
+
 
   handleGameRestart() {
     this.restartText.on('pointerdown', () => {
@@ -46,10 +53,11 @@ class PlayScene extends GameScene {
     this.physics.add.collider(this.obstacles, this.player, () => {
       this.isGameRunning = false;
       this.physics.pause();
+      this.anims.pauseAll();
       this.player.die();
       this.gameOverContainer.setAlpha(1);
       this.spawnTime = 0;
-      this.gameSpeed = 5;
+      this.gameSpeed = 10;
     });
   }
 
@@ -95,6 +103,15 @@ class PlayScene extends GameScene {
       .setAlpha(0);
   }
 
+  createAnimations() {
+    this.anims.create({
+      key: 'enemy-bird-fly',
+      frames: this.anims.generateFrameNumbers('enemy-bird'),
+      frameRate: 6,
+      repeat: -1
+    })
+  }
+
   update(time: number, delta: number): void {
     if (!this.isGameRunning) return;
 
@@ -126,14 +143,16 @@ class PlayScene extends GameScene {
 
   spawnObstacle() {
     const obstaclesCount = PRELOAD_CONFIG.cactusesCount + PRELOAD_CONFIG.birdsCount;
-    const obstacleNumber = Math.floor(Math.random() * obstaclesCount) + 1;
-    const distance = Phaser.Math.Between(600, 900);
+    // const obstacleNumber = Math.floor(Math.random() * obstaclesCount) + 1;
+    const obstacleNumber = 7;
+    const distance = Phaser.Math.Between(150, 300);
     let obstacle;
 
     if (obstacleNumber > PRELOAD_CONFIG.cactusesCount) {
       const enemyPossibleHeight = [20, 70];
       const enemyHeight = enemyPossibleHeight[Math.floor(Math.random() * enemyPossibleHeight.length)]
-      obstacle = this.obstacles.create(distance, this.gameHeight - enemyHeight, `enemy-bird`);
+      obstacle = this.obstacles.create(this.gameWidth + distance, this.gameHeight - enemyHeight, `enemy-bird`);
+      obstacle.play('enemy-bird-fly', true)
     } else {
       obstacle = this.obstacles.create(distance, this.gameHeight, `obstacle-${obstacleNumber}`);
     }

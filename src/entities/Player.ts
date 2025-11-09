@@ -14,7 +14,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
   init() {
     this.cursors = this.scene.input.keyboard.createCursorKeys();
-    this.setOrigin(0, 1).setGravityY(5000).setCollideWorldBounds(true).setBodySize(44, 92).setOffset(20, 0);
+    this.setOrigin(0, 1).setGravityY(5000).setCollideWorldBounds(true).setBodySize(44, 92).setOffset(20, 0).setDepth(1);
     this.registerAnimations();
   }
 
